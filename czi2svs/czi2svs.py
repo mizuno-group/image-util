@@ -13,16 +13,10 @@ Usage:
 
 @author: I.Azuma
 """
-# %%
-#!/usr/bin/env python3
-"""
-(Same header as before)
-@author: I.Azuma
-"""
 import pyvips
 import sys
 import os
-import slideio # aicspylibcziの代わりにslideioを使用
+import slideio 
 import numpy
 import traceback
 import argparse
@@ -38,16 +32,15 @@ def convert_czi_to_tiff(input_path, output_path, verbose=False):
     try:
         print(f"Reading '{input_path}' with slideio...")
         
-        # slideioでCZIファイルを開く
+        # open with slideio
         slide = slideio.open_slide(input_path, "CZI")
-        # 最初のシーンを取得
-        scene = slide.get_scene(0)
+        scene = slide.get_scene(0)  # Get the first scene
 
         if verbose:
             print(f"  > Scene loaded successfully. Size (WxH): {scene.size[0]}x{scene.size[1]}")
 
-        # シーン全体をNumPy配列として読み込む
-        # メモリ消費が非常に大きくなる可能性あり
+        # Read the entire scene as a NumPy array
+        # This may consume a lot of memory for large images
         image_data = scene.read_block()
         
         if verbose:
@@ -73,12 +66,10 @@ def convert_czi_to_tiff(input_path, output_path, verbose=False):
         traceback.print_exc(file=sys.stderr)
 
 def main():
-    # (argparse部分は変更なし)
     parser = argparse.ArgumentParser(
         description="Convert a CZI file to a pyramidal TIFF using slideio.",
-        # (epilogなど残りの部分も変更なし)
+        epilog="Example: python czi2svs.py input.czi output.tif"
     )
-    # ... (argparseの定義は上記と同じ)
     parser.add_argument("input_file", help="The path to the input .czi file.")
     parser.add_argument("output_file", help="The path for the output pyramidal .tif file.")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
